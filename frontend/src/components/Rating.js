@@ -69,7 +69,7 @@ Rating.defaultProps = {
 
 //限制传入参数的类型，类似于typescript
 Rating.propTypes = {
-    value:propTypes.number.isRequired,
+    value:propTypes.number,
     text:propTypes.string.isRequired,
     color:propTypes.string
 }

@@ -1,11 +1,19 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import {Link} from 'react-router-dom'
 import {Row, Col, Image, ListGroup, Card, Button} from 'react-bootstrap'
-import products from '../products'
+import axios from 'axios'
 import Rating from '../components/Rating'
 
 const Products = ({match}) => {
-  const product = products.find(product=>product._id === match.params.id) //获取当前id的手机产品
+  const [product, setProduct] = useState({}) //获取当前id产品
+
+  useEffect(()=>{
+    const fetchProduct = async ()=>{
+      const {data} = await axios.get(`/api/products/${match.params.id}`)
+      setProduct(data)
+    }
+    fetchProduct()
+  }, [match])
 
   return <>
       <Link className='btn btn-dark my-3' to='/'>Back</Link>
