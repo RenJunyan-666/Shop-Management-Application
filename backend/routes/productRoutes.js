@@ -9,6 +9,9 @@ const router = express.Router()
 //@access public
 router.get('/', asyncHandler(async (req, res) => {
     const products = await Product.find({})
+    //测试错误发生
+    //res.status(401)
+    //throw new Error('no permission!')
     res.json(products)
 }))
 
