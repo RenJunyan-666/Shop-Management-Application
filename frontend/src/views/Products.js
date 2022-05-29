@@ -1,13 +1,14 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import {useDispatch, useSelector} from 'react-redux'
 import {Link} from 'react-router-dom'
-import {Row, Col, Image, ListGroup, Card, Button} from 'react-bootstrap'
+import {Row, Col, Image, ListGroup, Card, Button, FormControl} from 'react-bootstrap'
 import Rating from '../components/Rating'
 import { listProductDetails } from '../actions/productActions'
 import Loader from '../components/Loader'
 import Message from '../components/Message'
 
-const Products = ({match}) => {
+const Products = ({match, history}) => {
+  const [qty, setQty] = useState(1) //购买数量
   const dispatch = useDispatch()
   const productDetails = useSelector(state => state.productDetails)
   const {loading, error, product} = productDetails
@@ -15,6 +16,11 @@ const Products = ({match}) => {
   useEffect(()=>{
     dispatch(listProductDetails(match.params.id))
   }, [dispatch, match])
+
+  //添加到购物车事件
+  const addToCartHandler = ()=>{
+    history.push(`/cart/${match.params.id}?qty=${qty}`)
+  }
 
   return <>
       <Link className='btn btn-dark my-3' to='/'>Back</Link>
@@ -63,7 +69,25 @@ const Products = ({match}) => {
                   </Row>
                 </ListGroup.Item>
                 <ListGroup.Item>
+                  <Row>
+                    <Col>Number:</Col>
+                    <Col>
+                      <FormControl 
+                      as='select' 
+                      value={qty} 
+                      onChange={(event)=>setQty(event.target.value)}>
+                        {[...Array(product.countInStock).keys()].map(idx => (
+                          <option key={idx+1} value={idx+1}>
+                            {idx + 1}
+                          </option>
+                        ))}
+                      </FormControl>
+                    </Col>
+                  </Row>
+                </ListGroup.Item>
+                <ListGroup.Item>
                   <Button 
+                  onClick={addToCartHandler}
                   className='btn-block' 
                   type='button' 
                   disabled={product.countInStock===0}
