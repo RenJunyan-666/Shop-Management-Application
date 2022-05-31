@@ -5,6 +5,9 @@ import Header from "./components/Header";
 import Home from "./views/Home";
 import Products from "./views/Products";
 import Cart from "./views/Cart";
+import Login from "./views/Login";
+import Register from "./views/Register";
+import Profile from "./views/Profile";
 
 function App() {
   return (
@@ -16,6 +19,9 @@ function App() {
           <Route path='/products/:id' component={Products}/>
           {/* 设置？表示id为可选项，有无id均可匹配 */}
           <Route path='/cart/:id?' component={Cart}/> 
+          <Route path='/login' component={Login} />
+          <Route path='/register' component={Register} />
+          <Route path='/profile' component={Profile} />
         </Container>
       </main>
       <Footer/>
