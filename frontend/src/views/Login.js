@@ -42,7 +42,7 @@ const Login = ({history, location}) => {
             <Form.Group controlId='email'>
                 <Form.Label>Email: </Form.Label>
                 <Form.Control 
-                type='email' 
+                type='text' 
                 placeholder='input email' 
                 value={email}
                 onChange={(event)=>setEmail(event.target.value)}

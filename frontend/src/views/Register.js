@@ -52,7 +52,7 @@ const Register = ({history, location}) => {
             <Form.Group controlId='name'>
                 <Form.Label>Name: </Form.Label>
                 <Form.Control 
-                type='name' 
+                type='text' 
                 placeholder='input name' 
                 value={name}
                 onChange={(event)=>setName(event.target.value)}
@@ -62,7 +62,7 @@ const Register = ({history, location}) => {
             <Form.Group controlId='email'>
                 <Form.Label>Email: </Form.Label>
                 <Form.Control 
-                type='email' 
+                type='text' 
                 placeholder='input email' 
                 value={email}
                 onChange={(event)=>setEmail(event.target.value)}

@@ -8,6 +8,9 @@ import Cart from "./views/Cart";
 import Login from "./views/Login";
 import Register from "./views/Register";
 import Profile from "./views/Profile";
+import Shipping from "./views/Shipping";
+import Payment from "./views/Payment";
+import Placeorder from "./views/Placeorder";
 
 function App() {
   return (
@@ -22,6 +25,9 @@ function App() {
           <Route path='/login' component={Login} />
           <Route path='/register' component={Register} />
           <Route path='/profile' component={Profile} />
+          <Route path='/shipping' component={Shipping} />
+          <Route path='/payment' component={Payment} />
+          <Route path='/placeorder' component={Placeorder} />
         </Container>
       </main>
       <Footer/>
