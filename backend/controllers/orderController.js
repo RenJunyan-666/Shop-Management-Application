@@ -33,4 +33,22 @@ const addOrderItems = asyncHandler(async (req, res) => {
     }
 })
 
-export {addOrderItems}
+
+//@desc 依据订单id获取订单
+//@route GET/api/orders/:id
+//@access private
+const getOrderById = asyncHandler(async (req, res) => {
+    const order = await Order.findById(req.params.id).populate(
+        'user',
+        'name email'
+    ) //填充用户信息
+
+    if(order){
+        res.json(order)
+    }else{
+        res.status(404)
+        throw new Error('No this order')
+    }
+})
+
+export {addOrderItems, getOrderById}
