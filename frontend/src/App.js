@@ -12,6 +12,8 @@ import Shipping from "./views/Shipping";
 import Payment from "./views/Payment";
 import Placeorder from "./views/Placeorder";
 import Order from "./views/Order";
+import UserList from "./views/UserList";
+import UserEdit from "./views/UserEdit";
 
 function App() {
   return (
@@ -30,6 +32,8 @@ function App() {
           <Route path='/payment' component={Payment} />
           <Route path='/placeorder' component={Placeorder} />
           <Route path='/order/:id' component={Order} />
+          <Route path='/admin/userlist' component={UserList} />
+          <Route path='/admin/user/:id/edit' component={UserEdit} />
         </Container>
       </main>
       <Footer/>

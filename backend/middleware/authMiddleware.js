@@ -23,4 +23,14 @@ const protect = asyncHandler( async (req, res, next) => {
     }
 })
 
-export {protect}
+//确认admin身份
+const admin = (req, res, next) => {
+    if(req.user && req.user.isAdmin){
+        next()
+    }else{
+        res.status(401)
+        throw new Error('No Admin Permission!')
+    }
+}
+
+export {protect, admin}

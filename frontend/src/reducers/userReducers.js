@@ -1,4 +1,4 @@
-import { USER_DETAILS_FAIL, USER_DETAILS_REQUEST, USER_DETAILS_SUCCESS, USER_LOGIN_FAIL, USER_LOGIN_REQUEST, USER_LOGIN_SUCCESS, USER_LOGOUT, USER_REGISTER_FAIL, USER_REGISTER_REQUEST, USER_REGISTER_SUCCESS, USER_UPDATE_PROFILE_FAIL, USER_UPDATE_PROFILE_REQUEST, USER_UPDATE_PROFILE_RESET, USER_UPDATE_PROFILE_SUCCESS } from "../constants/userConstants"
+import { USER_DELETE_FAIL, USER_DELETE_REQUEST, USER_DELETE_SUCCESS, USER_DETAILS_FAIL, USER_DETAILS_REQUEST, USER_DETAILS_SUCCESS, USER_LIST_FAIL, USER_LIST_REQUEST, USER_LIST_RESET, USER_LIST_SUCCESS, USER_LOGIN_FAIL, USER_LOGIN_REQUEST, USER_LOGIN_SUCCESS, USER_LOGOUT, USER_REGISTER_FAIL, USER_REGISTER_REQUEST, USER_REGISTER_SUCCESS, USER_UPDATE_FAIL, USER_UPDATE_PROFILE_FAIL, USER_UPDATE_PROFILE_REQUEST, USER_UPDATE_PROFILE_RESET, USER_UPDATE_PROFILE_SUCCESS, USER_UPDATE_REQUEST, USER_UPDATE_RESET, USER_UPDATE_SUCCESS } from "../constants/userConstants"
 
 // 用户登录reducer
 export const userLoginReducer = (state = {}, action)=>{
@@ -55,6 +55,52 @@ export const userUpdateProfileReducer = (state = {}, action)=>{
             return {loading:false, error: action.payload} //请求失败
         case USER_UPDATE_PROFILE_RESET:
             return {}
+        default:
+            return state
+    }
+}
+
+// 获取用户列表reducer
+export const userListReducer = (state = {users:[]}, action)=>{
+    switch(action.type){
+        case USER_LIST_REQUEST:
+            return {loading:true} //请求中
+        case USER_LIST_SUCCESS:
+            return {loading:false, users: action.payload } //请求成功，获得所有用户信息
+        case USER_LIST_FAIL:
+            return {loading:false, error: action.payload} //请求失败
+        case USER_LIST_RESET:
+            return {users:[]} //登出时清空用户列表
+        default:
+            return state
+    }
+}
+
+// 删除单个用户reducer
+export const userDeleteReducer = (state = {}, action)=>{
+    switch(action.type){
+        case USER_DELETE_REQUEST:
+            return {loading:true} //请求中
+        case USER_DELETE_SUCCESS:
+            return {loading:false, success: true} //删除成功
+        case USER_DELETE_FAIL:
+            return {loading:false, error: action.payload} //请求失败
+        default:
+            return state
+    }
+}
+
+// 更新单个用户资料reducer，因为之前更新detail的信息和此处的不一样，此处的有isAdmin，所以新定义一个
+export const userUpdateReducer = (state = {user:{}}, action)=>{
+    switch(action.type){
+        case USER_UPDATE_REQUEST:
+            return {loading:true} //请求中
+        case USER_UPDATE_SUCCESS:
+            return {loading:false, success: true} //更新成功
+        case USER_UPDATE_FAIL:
+            return {loading:false, error: action.payload} //请求失败
+        case USER_UPDATE_RESET:
+            return {user:{}}
         default:
             return state
     }
