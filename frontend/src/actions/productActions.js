@@ -1,4 +1,4 @@
-import { PRODUCT_DETAILS_FAIL, PRODUCT_DETAILS_REQUEST, PRODUCT_DETAILS_SUCCESS, PRODUCT_LIST_FAIL, PRODUCT_LIST_REQUEST, PRODUCT_LIST_SUCCESS } from "../constants/productConstants"
+import { PRODUCT_CREATE_FAIL, PRODUCT_CREATE_REQUEST, PRODUCT_CREATE_SUCCESS, PRODUCT_DELETE_FAIL, PRODUCT_DELETE_REQUEST, PRODUCT_DELETE_SUCCESS, PRODUCT_DETAILS_FAIL, PRODUCT_DETAILS_REQUEST, PRODUCT_DETAILS_SUCCESS, PRODUCT_LIST_FAIL, PRODUCT_LIST_REQUEST, PRODUCT_LIST_SUCCESS, PRODUCT_UPDATE_FAIL, PRODUCT_UPDATE_REQUEST, PRODUCT_UPDATE_SUCCESS } from "../constants/productConstants"
 import axios from 'axios'
 
 //获取所有产品action
@@ -29,6 +29,91 @@ export const listProductDetails = (id)=> async (dispatch) =>{
         dispatch({
             type: PRODUCT_DETAILS_FAIL, 
             payload: 
+            error.response 
+            && error.response.data.message 
+            ? error.response.data.message 
+            : error.message
+        })
+    }
+}
+
+//删除产品action
+export const deleteProduct = (id) => async (dispatch, getState) =>{
+    try {
+        dispatch({type:PRODUCT_DELETE_REQUEST}) //发起请求
+
+        const {userLogin:{userInfo}} = getState() //获取登录成功后的用户信息
+
+        //配置请求中对象格式
+        const config = {
+            headers:{
+                Authorization:`Bearer ${userInfo.token}`
+            }
+        }
+
+        await axios.delete(`/api/products/${id}`, config)
+        dispatch({type:PRODUCT_DELETE_SUCCESS }) //删除产品
+    } catch (error) {
+        dispatch({
+            type:PRODUCT_DELETE_FAIL, 
+            payload:
+            error.response 
+            && error.response.data.message 
+            ? error.response.data.message 
+            : error.message
+        })
+    }
+}
+
+//创建产品action
+export const createProduct = () => async (dispatch, getState) =>{
+    try {
+        dispatch({type:PRODUCT_CREATE_REQUEST}) //发起请求
+
+        const {userLogin:{userInfo}} = getState() //获取登录成功后的用户信息
+
+        //配置请求中对象格式
+        const config = {
+            headers:{
+                Authorization:`Bearer ${userInfo.token}`
+            }
+        }
+
+        const {data} = await axios.post(`/api/products`, {}, config)
+        dispatch({type:PRODUCT_CREATE_SUCCESS, payload:data }) //创建产品
+    } catch (error) {
+        dispatch({
+            type:PRODUCT_CREATE_FAIL, 
+            payload:
+            error.response 
+            && error.response.data.message 
+            ? error.response.data.message 
+            : error.message
+        })
+    }
+}
+
+//更新产品action
+export const updateProduct = (product) => async (dispatch, getState) =>{
+    try {
+        dispatch({type:PRODUCT_UPDATE_REQUEST}) //发起请求
+
+        const {userLogin:{userInfo}} = getState() //获取登录成功后的用户信息
+
+        //配置请求中对象格式
+        const config = {
+            headers:{
+                'Content-Type':'application/json',
+                Authorization:`Bearer ${userInfo.token}`
+            }
+        }
+
+        const {data} = await axios.put(`/api/products/${product._id}`, product, config)
+        dispatch({type:PRODUCT_UPDATE_SUCCESS, payload:data }) //更新产品
+    } catch (error) {
+        dispatch({
+            type:PRODUCT_UPDATE_FAIL, 
+            payload:
             error.response 
             && error.response.data.message 
             ? error.response.data.message 

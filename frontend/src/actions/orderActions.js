@@ -1,4 +1,4 @@
-import { ORDER_CREATE_FAIL, ORDER_CREATE_REQUEST, ORDER_CREATE_SUCCESS, ORDER_DETAILS_FAIL, ORDER_DETAILS_REQUEST, ORDER_DETAILS_SUCCESS } from "../constants/orderConstants"
+import { ORDER_CREATE_FAIL, ORDER_CREATE_REQUEST, ORDER_CREATE_SUCCESS, ORDER_DETAILS_FAIL, ORDER_DETAILS_REQUEST, ORDER_DETAILS_SUCCESS, ORDER_LIST_FAIL, ORDER_LIST_REQUEST, ORDER_LIST_SUCCESS } from "../constants/orderConstants"
 import axios from "axios"
 
 //创建订单action
@@ -49,6 +49,34 @@ export const getOrderDetails = (id) => async (dispatch, getState) =>{
     } catch (error) {
         dispatch({
             type:ORDER_DETAILS_FAIL, 
+            payload:
+            error.response 
+            && error.response.data.message 
+            ? error.response.data.message 
+            : error.message
+        })
+    }
+}
+
+//获取所有订单action
+export const listOrders = () => async (dispatch, getState) =>{
+    try {
+        dispatch({type:ORDER_LIST_REQUEST}) //发起请求
+
+        const {userLogin:{userInfo}} = getState() //获取登录成功后的用户信息
+
+        //配置请求中对象格式
+        const config = {
+            headers:{
+                Authorization:`Bearer ${userInfo.token}`
+            }
+        }
+
+        const {data} = await axios.get(`/api/orders`, config)
+        dispatch({type:ORDER_LIST_SUCCESS, payload:data}) 
+    } catch (error) {
+        dispatch({
+            type:ORDER_LIST_FAIL, 
             payload:
             error.response 
             && error.response.data.message 

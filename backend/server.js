@@ -6,6 +6,8 @@ import connectDB from './config/db.js'
 import productRoutes from './routes/productRoutes.js'
 import userRoutes from './routes/userRoutes.js'
 import orderRoutes from './routes/orderRoutes.js'
+import uploadRoutes from './routes/uploadRoutes.js'
+import path from 'path'
 
 dotenv.config()
 connectDB()
@@ -20,6 +22,11 @@ app.get('/', (req, res) => {
 app.use('/api/products', productRoutes) //使用产品路由
 app.use('/api/users', userRoutes) //使用用户路由
 app.use('/api/orders', orderRoutes) //使用订单路由
+app.use('/api/upload', uploadRoutes) //使用文件上传路由
+
+//upload
+const __dirname = path.resolve()
+app.use('/uploads', express.static(path.join(__dirname, '/uploads')))
 
 //错误处理中间件
 app.use(notFound)

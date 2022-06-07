@@ -51,4 +51,12 @@ const getOrderById = asyncHandler(async (req, res) => {
     }
 })
 
-export {addOrderItems, getOrderById}
+//@desc 获取所有订单
+//@route GET/api/orders
+//@access private(Admin)
+const getOrders = asyncHandler(async (req, res) => {
+    const orders = await Order.find({}).populate('user', 'id name') //关联到user
+    res.json(orders)
+})
+
+export {addOrderItems, getOrderById, getOrders}
