@@ -4,7 +4,7 @@ import { composeWithDevTools } from "redux-devtools-extension";
 import { productCreateReducer, productDeleteReducer, productDetailsReducer, productListReducer, productUpdateReducer } from "./reducers/productReducers";
 import { cartReducer } from "./reducers/cartReducers";
 import { userDeleteReducer, userDetailsReducer, userListReducer, userLoginReducer, userRegisterReducer, userUpdateProfileReducer, userUpdateReducer } from "./reducers/userReducers";
-import { orderCreateReducer, orderDetailsReducer, orderListReducer } from "./reducers/orderReducers";
+import { orderCreateReducer, orderDeliverReducer, orderDetailsReducer, orderListMyReducer, orderListReducer, orderPayReducer } from "./reducers/orderReducers";
 
 const reducer = combineReducers({
     productList: productListReducer,
@@ -22,7 +22,10 @@ const reducer = combineReducers({
     userUpdate: userUpdateReducer,
     orderCreate: orderCreateReducer,
     orderDetails: orderDetailsReducer,
-    orderList: orderListReducer
+    orderList: orderListReducer,
+    orderPay: orderPayReducer,
+    orderListMy: orderListMyReducer,
+    orderDeliver: orderDeliverReducer
 }) 
 
 //获取本地购物车信息

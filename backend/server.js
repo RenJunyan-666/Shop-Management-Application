@@ -8,6 +8,7 @@ import userRoutes from './routes/userRoutes.js'
 import orderRoutes from './routes/orderRoutes.js'
 import uploadRoutes from './routes/uploadRoutes.js'
 import path from 'path'
+import axios from 'axios'
 
 dotenv.config()
 connectDB()
@@ -17,6 +18,19 @@ app.use(express.json())
 
 app.get('/', (req, res) => {
     res.send('server running...')
+})
+
+//获取支付的status状态码
+// app.get('/status', (req, res)=>{
+//     axios.get('https://www.thenewstep.cn/pay/logs/log.txt')
+//     .then(response => {
+//         res.json({status:response.data})
+//     })
+// })
+
+//获取paypal的clientID
+app.get('/api/config/paypal', (req,res)=>{
+    res.send(process.env.PAYPAL_CLIENT_ID)
 })
 
 app.use('/api/products', productRoutes) //使用产品路由

@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react'
-import {Form, Button, Row, Col} from 'react-bootstrap'
+import {Form, Button, Row, Col, Table} from 'react-bootstrap'
 import {useDispatch, useSelector} from 'react-redux'
 import Message from '../components/Message'
 import Loader from '../components/Loader'
 import {getUserDetails, updateUserProfile} from '../actions/userActions'
 import { USER_UPDATE_PROFILE_RESET } from '../constants/userConstants'
+import { listMyOrders } from '../actions/orderActions'
+import { LinkContainer } from 'react-router-bootstrap'
 
 const Profile = ({history}) => {
   const [name, setName] = useState('')
@@ -24,6 +26,9 @@ const Profile = ({history}) => {
   const userUpdateProfile = useSelector((state)=>state.userUpdateProfile)
   const {success} = userUpdateProfile
 
+  const myOrders = useSelector(state=>state.orderListMy)
+  const {loading:loadingOrders, error:errorOrders, orders} = myOrders
+
   useEffect(()=>{
     if(!userInfo){ //没有登录
         history.push('/login')
@@ -31,6 +36,7 @@ const Profile = ({history}) => {
         if(!user.name){ //没有用户字段，需要获取用户详情
             dispatch({type:USER_UPDATE_PROFILE_RESET})
             dispatch(getUserDetails('profile'))
+            dispatch(listMyOrders())
         }else{ //加载进来默认有相应的值
             setName(user.name)
             setEmail(user.email)
@@ -116,6 +122,47 @@ const Profile = ({history}) => {
        </Col>
        <Col md={9}>
         <h2>My Orders</h2>
+        {
+            loadingOrders 
+            ? <Loader/> 
+            : errorOrders 
+            ? <Message variant='danger'>{errorOrders}</Message>
+            : (
+                <Table striped bordered hover responsive className='table-sm'>
+                    <thead>
+                        <tr>
+                        <th>ID</th>
+                        <th>User</th>
+                        <th>Created Date</th>
+                        <th>Total Price</th>
+                        <th>Payment Status</th>
+                        <th>Shipping Status</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        {orders.map(order=>(
+                            <tr key={order._id}>
+                                <td>{order._id}</td>
+                                <td>{order.createdAt.substring(0,10)}</td>
+                                <td>{order.totalPrice}</td>
+                                <td>{order.isPaid ? order.paidAt.substring(0,10) : (
+                                    <i className='fas fa-times' style={{color:'red'}}></i>
+                                )}</td>
+                                <td>{order.isDelivered ? order.deliveredAt.substring(0,10) : (
+                                    <i className='fas fa-times' style={{color:'red'}}></i>
+                                )}</td>
+                                <td>
+                                    <LinkContainer to={`/order/${order._id}`}>
+                                        <Button variant='light' className='btn-sm'>view details</Button>
+                                    </LinkContainer>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </Table>
+            )
+        }
        </Col>
     </Row>
   )

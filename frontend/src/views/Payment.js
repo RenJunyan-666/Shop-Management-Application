@@ -42,10 +42,10 @@ const Payment = ({history}) => {
 
                     <Form.Check 
                     type='radio' 
-                    label='alipay' 
-                    id='alipay' 
+                    label='Paypal' 
+                    id='Paypal' 
                     name='paymentMethod' 
-                    value='alipay'
+                    value='Paypal'
                     onChange={(event)=>setPaymentMethod(event.target.value)}
                     />
                 </Col>
