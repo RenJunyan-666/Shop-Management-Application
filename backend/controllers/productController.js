@@ -2,14 +2,27 @@ import asyncHandler from 'express-async-handler' //捕获异常
 import Product from '../models/productModel.js'
 
 //@desc 请求所有产品
-//@route GET/api/products
+//@route GET/api/products?keyword=${keyword}
 //@access public
 const getProducts = asyncHandler(async (req, res) => {
-    const products = await Product.find({})
-    //测试错误发生
-    //res.status(401)
-    //throw new Error('no permission!')
-    res.json(products)
+    //每页展示的产品数量
+    const pageSize = 6
+    const page = Number(req.query.pageNumber) || 1
+    const keyword = req.query.keyword
+        ? {
+            name: {
+            $regex: req.query.keyword,
+            $options: 'i',
+            },
+        }
+        : {}
+
+    //获取产品数量（包括符合条件的关键词）
+    const count = await Product.countDocuments({ ...keyword })
+    const products = await Product.find({ ...keyword })
+        .limit(pageSize)
+        .skip(pageSize * (page - 1))
+    res.json({ products, page, pages: Math.ceil(count / pageSize) })
 })
 
 //@desc 请求单个产品
@@ -87,4 +100,40 @@ const updateProduct = asyncHandler(async (req, res) => {
     }
 })
 
-export {getProducts, getProductById, deleteProduct, createProduct, updateProduct}
+//@desc 创建产品评论
+//@route POST/api/products/:id/reviews
+//@access private(User)
+const createProductReview = asyncHandler(async (req, res) => {
+    const {rating, comment} = req.body
+    const product = await Product.findById(req.params.id)
+
+    if(product){
+        //判断用户是否已经评论
+        const alreadyReviewed = product.reviews.find(review => review.user.toString() === req.user._id.toString())
+
+        if(alreadyReviewed){
+            res.status(400)
+            throw new Error('You have commented this product!')
+        }
+
+        //创建新评论
+        const review = {
+            name: req.user.name,
+            rating: Number(rating),
+            comment,
+            user: req.user._id
+        }
+        product.reviews.push(review)
+
+        //更新产品的评论数及星级
+        product.numReviews = product.reviews.length
+        product.rating = (product.reviews.reduce((acc, review)=> acc + review.rating, 0)) / product.reviews.length
+        await product.save()
+        res.status(201).json({message:'Successful comment!'})
+    }else{
+        res.status(404)
+        throw new Error('Not Found')
+    }
+})
+
+export {getProducts, getProductById, deleteProduct, createProduct, updateProduct, createProductReview}

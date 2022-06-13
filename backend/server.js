@@ -9,12 +9,17 @@ import orderRoutes from './routes/orderRoutes.js'
 import uploadRoutes from './routes/uploadRoutes.js'
 import path from 'path'
 import axios from 'axios'
+import morgan from 'morgan'
 
 dotenv.config()
 connectDB()
 
 const app = express()
 app.use(express.json()) 
+
+if(process.env.NODE_ENV === 'development'){ //只在开发环境运用
+    app.use(morgan('dev'))
+}
 
 app.get('/', (req, res) => {
     res.send('server running...')
