@@ -1,4 +1,4 @@
-import {PRODUCT_LIST_REQUEST, PRODUCT_LIST_SUCCESS, PRODUCT_LIST_FAIL, PRODUCT_DETAILS_SUCCESS, PRODUCT_DETAILS_REQUEST, PRODUCT_DETAILS_FAIL, PRODUCT_DELETE_REQUEST, PRODUCT_DELETE_SUCCESS, PRODUCT_DELETE_FAIL, PRODUCT_CREATE_REQUEST, PRODUCT_CREATE_SUCCESS, PRODUCT_CREATE_FAIL, PRODUCT_CREATE_RESET, PRODUCT_UPDATE_REQUEST, PRODUCT_UPDATE_SUCCESS, PRODUCT_UPDATE_FAIL, PRODUCT_UPDATE_RESET, PRODUCT_CREATE_REVIEW_REQUEST, PRODUCT_CREATE_REVIEW_SUCCESS, PRODUCT_CREATE_REVIEW_FAIL, PRODUCT_CREATE_REVIEW_RESET } from '../constants/productConstants'
+import {PRODUCT_LIST_REQUEST, PRODUCT_LIST_SUCCESS, PRODUCT_LIST_FAIL, PRODUCT_DETAILS_SUCCESS, PRODUCT_DETAILS_REQUEST, PRODUCT_DETAILS_FAIL, PRODUCT_DELETE_REQUEST, PRODUCT_DELETE_SUCCESS, PRODUCT_DELETE_FAIL, PRODUCT_CREATE_REQUEST, PRODUCT_CREATE_SUCCESS, PRODUCT_CREATE_FAIL, PRODUCT_CREATE_RESET, PRODUCT_UPDATE_REQUEST, PRODUCT_UPDATE_SUCCESS, PRODUCT_UPDATE_FAIL, PRODUCT_UPDATE_RESET, PRODUCT_CREATE_REVIEW_REQUEST, PRODUCT_CREATE_REVIEW_SUCCESS, PRODUCT_CREATE_REVIEW_FAIL, PRODUCT_CREATE_REVIEW_RESET, PRODUCT_TOP_REQUEST, PRODUCT_TOP_SUCCESS, PRODUCT_TOP_FAIL, PRODUCT_DETAILS_RESET } from '../constants/productConstants'
 
 // 获取所有产品的reducer
 export const productListReducer = (state = {products:[]}, action)=>{
@@ -28,6 +28,8 @@ export const productDetailsReducer = (state = {product:{}}, action)=>{
             return {loading:false, product: action.payload} //请求成功
         case PRODUCT_DETAILS_FAIL:
             return {loading:false, error: action.payload} //请求失败
+        case PRODUCT_DETAILS_RESET:
+            return {product:{}}
         default:
             return state
     }
@@ -90,6 +92,20 @@ export const productReviewCreateReducer = (state = {}, action)=>{
             return {loading:false, error: action.payload} //请求失败
         case PRODUCT_CREATE_REVIEW_RESET:
             return {} //重置
+        default:
+            return state
+    }
+}
+
+// 获取排名前三产品的reducer
+export const productsTopReducer = (state = {products:[]}, action)=>{
+    switch(action.type){
+        case PRODUCT_TOP_REQUEST:
+            return {loading:true} //请求中
+        case PRODUCT_TOP_SUCCESS:
+            return {loading:false, products:action.payload} //获取排名前三的产品
+        case PRODUCT_TOP_FAIL:
+            return {loading:false, error: action.payload} //请求失败
         default:
             return state
     }

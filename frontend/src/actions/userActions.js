@@ -41,6 +41,7 @@ export const logout = ()=>(dispatch)=>{
     dispatch({type:USER_LIST_RESET})
     dispatch({type:USER_DETAILS_RESET})
     dispatch({type:ORDER_LIST_MY_RESET})
+    document.location.href='/login'
 }
 
 //用户注册action

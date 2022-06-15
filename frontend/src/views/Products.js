@@ -6,7 +6,8 @@ import Rating from '../components/Rating'
 import { createProductReview, listProductDetails } from '../actions/productActions'
 import Loader from '../components/Loader'
 import Message from '../components/Message'
-import { PRODUCT_CREATE_REVIEW_RESET } from '../constants/productConstants'
+import { PRODUCT_CREATE_REVIEW_RESET, PRODUCT_DETAILS_RESET } from '../constants/productConstants'
+import Meta from '../components/Meta'
 
 const Products = ({match, history}) => {
   const [qty, setQty] = useState(1) //购买数量
@@ -30,6 +31,7 @@ const Products = ({match, history}) => {
       setComment('')
     }
     if(!product._id || product._id !== match.params.id || successReview){
+      dispatch({type:PRODUCT_DETAILS_RESET})
       dispatch(listProductDetails(match.params.id))
       dispatch({type:PRODUCT_CREATE_REVIEW_RESET})
     }
@@ -54,6 +56,7 @@ const Products = ({match, history}) => {
       ? <Message variant='danger'>{error}</Message> 
       : (
         <>
+          <Meta title={product.name}/>
           <Row>
             <Col md={6}>
               <Image src={product.image} alt={product.name} fluid/>

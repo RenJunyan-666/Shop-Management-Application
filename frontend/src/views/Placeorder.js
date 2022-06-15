@@ -5,6 +5,8 @@ import { useDispatch, useSelector} from 'react-redux'
 import CheckoutSteps from '../components/CheckoutSteps'
 import Message from '../components/Message'
 import { createOrder } from '../actions/orderActions'
+import { ORDER_CREATE_RESET } from '../constants/orderConstants'
+import { USER_DETAILS_RESET } from '../constants/userConstants'
 
 const Placeorder = ({history}) => {
   const cart = useSelector(state=>state.cart)
@@ -29,6 +31,8 @@ const Placeorder = ({history}) => {
   useEffect(()=>{
     if(success){ //如果确认订单，那么之后退出了再到当前页面会直接跳转到订单页面
         history.push(`/order/${order._id}`)
+        dispatch({type:ORDER_CREATE_RESET})
+        dispatch({type:USER_DETAILS_RESET})
     }
     // eslint-disable-next-line
   }, [history, success])

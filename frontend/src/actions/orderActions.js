@@ -1,6 +1,7 @@
 import { ORDER_CREATE_FAIL, ORDER_CREATE_REQUEST, ORDER_CREATE_SUCCESS, ORDER_DELIVER_REQUEST, ORDER_DELIVER_SUCCESS, ORDER_DELLIVER_FAIL, ORDER_DETAILS_FAIL, ORDER_DETAILS_REQUEST, ORDER_DETAILS_SUCCESS, ORDER_LIST_FAIL, ORDER_LIST_MY_FAIL, ORDER_LIST_MY_REQUEST, ORDER_LIST_MY_SUCCESS, ORDER_LIST_REQUEST, ORDER_LIST_SUCCESS, ORDER_PAY_FAIL, ORDER_PAY_REQUEST, ORDER_PAY_SUCCESS } from "../constants/orderConstants"
 import axios from "axios"
 import { logout } from "./userActions"
+import { CART_CLEAR_ITEM } from "../constants/cartConstants"
 
 //创建订单action
 export const createOrder = (order) => async (dispatch, getState) =>{
@@ -19,6 +20,7 @@ export const createOrder = (order) => async (dispatch, getState) =>{
 
         const {data} = await axios.post(`/api/orders`, order, config)
         dispatch({type:ORDER_CREATE_SUCCESS, payload:data}) 
+        dispatch({type:CART_CLEAR_ITEM})
     } catch (error) {
         dispatch({
             type:ORDER_CREATE_FAIL, 

@@ -234,11 +234,11 @@ const Order = ({match, history}) => {
 
                         {/* paypal支付btn */}
                         {
-                            !order.isPaid && (
+                            !order.isPaid && order.paymentMethod === 'Paypal' && (
                                 <ListGroup.Item>
                                     {loadingPay && <Loader/>}
                                     {
-                                        order.paymentMethod === 'Paypal' && !SDK ? <Loader/> : (
+                                        !SDK ? <Loader/> : (
                                             <PayPalButton 
                                             amount={order.totalPrice}
                                             onSuccess={handlePayment}></PayPalButton>

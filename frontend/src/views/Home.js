@@ -6,7 +6,9 @@ import { listProducts } from '../actions/productActions'
 import Loader from '../components/Loader'
 import Message from '../components/Message'
 import Paginate from '../components/Paginate'
-
+import ProductsCarousel from '../components/ProductsCarousel'
+import Meta from '../components/Meta'
+import { Link } from 'react-router-dom'
 
 const Home = ({match}) => {
   const dispatch = useDispatch() //派发请求数据的action函数
@@ -20,6 +22,10 @@ const Home = ({match}) => {
   }, [dispatch, keyword, pageNumber])
 
   return <>
+    <Meta/>
+    {
+      !keyword ? <ProductsCarousel/> : <Link to='/' className='btn btn-dark'>Back</Link>
+    }
     <h1>New Products</h1>
     {loading 
     ? <Loader/> 
