@@ -21,10 +21,6 @@ if(process.env.NODE_ENV === 'development'){ //只在开发环境运用
     app.use(morgan('dev'))
 }
 
-app.get('/', (req, res) => {
-    res.send('server running...')
-})
-
 //获取支付的status状态码
 // app.get('/status', (req, res)=>{
 //     axios.get('https://www.thenewstep.cn/pay/logs/log.txt')
@@ -46,6 +42,19 @@ app.use('/api/upload', uploadRoutes) //使用文件上传路由
 //upload
 const __dirname = path.resolve()
 app.use('/uploads', express.static(path.join(__dirname, '/uploads')))
+
+//渲染前端静态文件
+if(process.env.NODE_ENV === 'production'){ //生产环境下
+    app.use(express.static(path.join(__dirname, '/frontend/build')))
+
+    app.get('*', (req, res)=>{
+        res.sendFile(path.resolve(__dirname,'frontend', 'build', 'index.html'))
+    })
+}else{ //开发环境下
+    app.get('/', (req, res) => {
+        res.send('server running...')
+    })
+}
 
 //错误处理中间件
 app.use(notFound)
